@@ -71,10 +71,18 @@
             </Border>
 
             <Border Style="{StaticResource CardStyle}">
-                <StackPanel Margin="20">
-                    <TextBlock Text="LAGER" FontSize="20" FontWeight="SemiBold" Foreground="#A0A0A0"/>
-                    <TextBlock x:Name="StorageText" Text="Søger efter hardware..." Margin="0,15,0,0" FontSize="16" TextWrapping="Wrap"/>
-                </StackPanel>
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="LAGER" FontSize="20" FontWeight="SemiBold" Foreground="#A0A0A0" Margin="0,0,0,15"/>
+                    
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <TextBlock x:Name="StorageText" Text="Søger efter hardware..." FontSize="15" TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                </Grid>
             </Border>
 
             <Border x:Name="BatteryCard" Style="{StaticResource CardStyle}" Visibility="Collapsed">

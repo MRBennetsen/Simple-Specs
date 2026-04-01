@@ -136,8 +136,11 @@ namespace Simple_Specs
         {
             string capacity = "Kunne ikke beregne RAM";
             string speed = "";
+            string modelInfo = "";
+
             try
             {
+                // 1. Samlet kapacitet
                 using ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem");
                 foreach (ManagementObject obj in searcher.Get())
                 {
@@ -149,18 +152,37 @@ namespace Simple_Specs
                     }
                 }
 
-                using ManagementObjectSearcher speedSearcher = new ManagementObjectSearcher("SELECT Speed FROM Win32_PhysicalMemory");
-                foreach (ManagementObject obj in speedSearcher.Get())
+                // 2. Hastighed og Model
+                using ManagementObjectSearcher memSearcher = new ManagementObjectSearcher("SELECT Speed, Manufacturer, PartNumber FROM Win32_PhysicalMemory");
+                foreach (ManagementObject obj in memSearcher.Get())
                 {
                     if (obj["Speed"] != null && obj["Speed"].ToString() != "0")
                     {
                         speed = $"\nHastighed: {obj["Speed"]} MT/s";
-                        break; 
                     }
+
+                    string mfg = obj["Manufacturer"]?.ToString()?.Trim() ?? "";
+                    string part = obj["PartNumber"]?.ToString()?.Trim() ?? "";
+
+                    // Filtrer "skralde-data" fra dovne producenter
+                    if (!string.IsNullOrEmpty(part) && part != "Unknown" && part != "00000000")
+                    {
+                        if (!string.IsNullOrEmpty(mfg) && mfg != "Unknown" && mfg != "0000")
+                        {
+                            modelInfo = $"\nModel: {mfg} {part}";
+                        }
+                        else
+                        {
+                            modelInfo = $"\nModel: {part}";
+                        }
+                    }
+                    
+                    break; // Vi trækker bare info fra den første RAM-blok for at holde det simpelt
                 }
             }
             catch { }
-            return capacity + speed;
+            
+            return capacity + speed + modelInfo;
         }
 
         private string GetStorageInfo()
@@ -168,8 +190,22 @@ namespace Simple_Specs
             string storageDetails = "";
             try
             {
-                using ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT DeviceID, FreeSpace, Size FROM Win32_LogicalDisk WHERE DriveType = 3");
-                foreach (ManagementObject obj in searcher.Get())
+                // 1. Find Fysiske drev (Hardware modeller)
+                using ManagementObjectSearcher diskSearcher = new ManagementObjectSearcher("SELECT Model, Size FROM Win32_DiskDrive");
+                foreach (ManagementObject obj in diskSearcher.Get())
+                {
+                    if (obj["Model"] != null && obj["Size"] != null)
+                    {
+                        double totalGb = Convert.ToDouble(obj["Size"]) / (1024 * 1024 * 1024);
+                        storageDetails += $"💾 {obj["Model"]} ({Math.Round(totalGb)} GB)\n";
+                    }
+                }
+
+                storageDetails += "\n";
+
+                // 2. Find Logiske partitioner (C:, D: ledig plads)
+                using ManagementObjectSearcher partitionSearcher = new ManagementObjectSearcher("SELECT DeviceID, FreeSpace, Size FROM Win32_LogicalDisk WHERE DriveType = 3");
+                foreach (ManagementObject obj in partitionSearcher.Get())
                 {
                     if (obj["Size"] != null && obj["FreeSpace"] != null)
                     {
@@ -180,7 +216,8 @@ namespace Simple_Specs
                 }
             }
             catch { }
-            return string.IsNullOrEmpty(storageDetails) ? "Kunne ikke finde lagerdrev" : storageDetails.Trim();
+            
+            return string.IsNullOrEmpty(storageDetails.Trim()) ? "Kunne ikke finde lagerdrev" : storageDetails.Trim();
         }
 
         private async Task<string> GetNetworkInfoAsync()
