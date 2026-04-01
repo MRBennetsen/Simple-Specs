@@ -1,0 +1,103 @@
+﻿<Window x:Class="Simple_Specs.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Simple-Specs" Height="750" Width="1150"
+        Background="#050505" Foreground="White"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <Storyboard x:Key="GlowAnimation" RepeatBehavior="Forever" AutoReverse="True">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)"
+                             From="15" To="40" Duration="0:0:3" />
+            <ColorAnimation Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)"
+                            From="#00D2FF" To="#8A2BE2" Duration="0:0:6" />
+        </Storyboard>
+
+        <Style TargetType="Border" x:Key="CardStyle">
+            <Setter Property="Background" Value="#121212"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#00D2FF" BlurRadius="20" ShadowDepth="0" Opacity="0.8"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource GlowAnimation}"/>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="SIMPLE-SPECS" FontSize="28" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Margin="0,0,0,15" Foreground="#FFFFFF"/>
+
+        <UniformGrid Grid.Row="1" Columns="3" VerticalAlignment="Center">
+            
+            <Border x:Name="SystemCard" Style="{StaticResource CardStyle}" Visibility="Collapsed">
+                <StackPanel Margin="20">
+                    <TextBlock Text="SYSTEM" FontSize="20" FontWeight="SemiBold" Foreground="#A0A0A0"/>
+                    <TextBlock x:Name="SystemText" Text="..." Margin="0,15,0,0" FontSize="16" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Margin="20">
+                    <TextBlock Text="CPU" FontSize="20" FontWeight="SemiBold" Foreground="#A0A0A0"/>
+                    <TextBlock x:Name="CpuText" Text="Søger efter hardware..." Margin="0,15,0,0" FontSize="16" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Margin="20">
+                    <TextBlock Text="GPU" FontSize="20" FontWeight="SemiBold" Foreground="#A0A0A0"/>
+                    <TextBlock x:Name="GpuText" Text="Søger efter hardware..." Margin="0,15,0,0" FontSize="16" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Margin="20">
+                    <TextBlock Text="RAM" FontSize="20" FontWeight="SemiBold" Foreground="#A0A0A0"/>
+                    <TextBlock x:Name="RamText" Text="Søger efter hardware..." Margin="0,15,0,0" FontSize="16" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Margin="20">
+                    <TextBlock Text="LAGER" FontSize="20" FontWeight="SemiBold" Foreground="#A0A0A0"/>
+                    <TextBlock x:Name="StorageText" Text="Søger efter hardware..." Margin="0,15,0,0" FontSize="16" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border x:Name="BatteryCard" Style="{StaticResource CardStyle}" Visibility="Collapsed">
+                <StackPanel Margin="20">
+                    <TextBlock Text="BATTERI" FontSize="20" FontWeight="SemiBold" Foreground="#A0A0A0"/>
+                    <TextBlock x:Name="BatteryText" Text="..." Margin="0,15,0,0" FontSize="16" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Margin="20">
+                    <TextBlock Text="NETVÆRK" FontSize="20" FontWeight="SemiBold" Foreground="#A0A0A0"/>
+                    <TextBlock x:Name="NetworkText" Text="Klar til at hente..." Margin="0,15,0,15" FontSize="16" TextWrapping="Wrap"/>
+                    <Button Content="Hent Netværksinfo" Click="UpdateNetwork_Click" 
+                            Background="#252525" Foreground="White" BorderThickness="0" Padding="8" Cursor="Hand"/>
+                </StackPanel>
+            </Border>
+            
+        </UniformGrid>
+
+        <Button Content="Kopier alle specs til udklipsholder" Grid.Row="2" 
+                HorizontalAlignment="Center" Margin="0,20,0,0" Padding="30,12" FontSize="14" FontWeight="Bold"
+                Background="#1A1A1A" Foreground="#00D2FF" BorderBrush="#00D2FF" BorderThickness="1"
+                Cursor="Hand" Click="CopySpecs_Click"/>
+    </Grid>
+</Window>
