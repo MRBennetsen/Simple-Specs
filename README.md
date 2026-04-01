@@ -1,77 +1,49 @@
-# Simple-Specs
+# 🚀 Simple-Specs
 
-En elegant og brugervenlig Windows-applikation, der viser detaljerede maskinvarespecifikationer for din computer.
+![Platform](https://img.shields.io/badge/Platform-Windows%2011%20%7C%2010-blue)
+![Architecture](https://img.shields.io/badge/Arkitektur-x64%20%7C%20ARM64-success)
+![.NET](https://img.shields.io/badge/.NET-9.0-purple)
 
-## Om projektet
+**Simple-Specs** er et lynhurtigt, letvægts og 100% portabelt hardware-dashboard til Windows. 
 
-**Simple-Specs** er en WPF-baseret applikation designet til at præsentere vigtige systemoplysninger om din Windows-computer. Appen bruger Windows Management Instrumentation (WMI) til at indsamle data om hardware og viser det i en moderne, Dark-Mode-inspireret brugergrænseflade med animated glow-effekter.
+Bygget af frustration over langsomme, reklamefyldte spec-programmer. Simple-Specs giver IT-supportere, systemadministratorer og almindelige brugere det gyldne overblik over deres maskines vitale dele på et splitsekund – pakket ind i et moderne, mørkt OLED-optimeret design.
 
-## Features
+## ✨ Højdepunkter
 
-- 🖥️ **Systemoplysninger** - Producent, model og serienummer
-- 🎮 **CPU & GPU Info** - Processortype og grafikkort detaljer
-- 💾 **RAM & Lagerplads** - Hukommelse og diskpladsberegninger
-- 🔋 **Batteri Status** - Batteri sundhedstilstand (for bærbare computere)
-- ✨ **Moderne UI** - Mørk tema med animated glow-effekter
-- 📊 **Asynkron indlæsning** - Responsiv UI uden frysning
-
-## Systemkrav
-
-- Windows 10 eller nyere
-- .NET 9.0 (Windows Desktop Runtime)
-- Der kræves adminadgang for at få adgang til nogle WMI-data (f.eks. batteri sundhed)
-
-## Installation & Brug
-
-### Fra kilde kode
-
-1. Klon repositoriet:
-```bash
-git clone https://github.com/din-bruger/Simple-Specs.git
-cd Simple-Specs
-```
-
-2. Byg og kør applikationen:
-```bash
-dotnet run
-```
-
-3. Eller byg som eksekverbar:
-```bash
-dotnet publish -c Release -o ./output
-```
-
-## Teknologier
-
-- **Framework**: .NET 9.0 WPF
-- **Sprog**: C#
-- **System API**: Windows Management Instrumentation (WMI)
-- **UI**: XAML med DataBinding
-- **Asynkron programmering**: Task-baseret async/await
-
-## Projektstruktur
-
-```
-Simple-Specs/
-├── App.xaml                 # Applikationsressourcer
-├── App.xaml.cs             # Applikationslogik
-├── MainWindow.xaml         # Brugergrænseflademarkup
-├── MainWindow.xaml.cs      # GUI-logik og systemhentning
-├── Simple-Specs.csproj     # Projektfil
-└── README.md               # Denne fil
-```
-
-## Hvordan det fungerer
-
-1. **Appstart**: MainWindow initialiserer og kalder `LoadHardwareSpecsAsync()`
-2. **Dataindsamling**: Bakgrundstråd bruger WMI til at indsamle hardwaredata
-3. **UI-opdatering**: Data returneres til UI-tråd og vises i stilfulde kort
-4. **Dynamisk layout**: Kort skjules hvis data ikke er tilgængelig (f.eks. ingen batteri på desktop)
-
-## Licens
-
-Dette projekt er open source - brug det gerne til personlige og kommercielle formål.
+- **🔋 Zero Install (Portabelt):** Hele programmet er pakket i én enkelt `.exe`-fil. Kræver ingen installation eller eksterne frameworks. Lige til at smide på en USB-nøgle.
+- **⚡ Ægte Hastigheder:** Læser RAM-hastighed korrekt i MT/s i stedet for at forvirre med forældede MHz-tal.
+- **🧠 Dynamisk Brugerflade:** Skjuler automatisk kort (som f.eks. Batteri og System/BIOS info), hvis hardwaren ikke understøtter det.
+- **🌐 Indbygget Netværks-tjek:** Viser øjeblikkeligt aktivt netværkskort, Privat IP, MAC-adresse og Offentlig IP, hvis knappen trykkes.
+- **📋 1-Click Eksport:** En dedikeret kopier-knap formaterer alle specs pænt til udklipsholderen – perfekt til sagsbehandlingssystemer eller salgsannoncer.
+- **💪 Native ARM64 Support:** Kører fejlfrit og ufiltreret på moderne Snapdragon X processorer uden brug af emulering.
 
 ---
 
-Lavet med ❤️ til Windows-brugere der gerne vil se deres systemspecifikationer på et sekund.
+## 📥 Download & Brug
+
+Du behøver ikke at kompilere koden selv for at bruge programmet. 
+
+1. Gå til [Releases-siden](../../releases) her på GitHub.
+2. Download den version, der passer til dit system:
+   - `Simple-Specs-x64.exe` (Til standard Intel/AMD maskiner)
+   - `Simple-Specs-ARM64.exe` (Til Snapdragon / ARM maskiner)
+3. Dobbeltklik på filen og kør programmet!
+
+---
+
+## 🛠️ For Udviklere (Byg det selv)
+
+Vil du pille i koden, ændre farverne eller tilføje nye funktioner? Projektet er utrolig nemt at sætte op.
+
+### Forudsætninger
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- C# Dev Kit (VS Code Extension)
+
+### Kørsel lokalt
+Klon projektet og kør det direkte i din terminal:
+
+```bash
+git clone [https://github.com/DIT-BRUGERNAVN/Simple-Specs.git](https://github.com/MRBennetsen/Simple-Specs.git)
+cd Simple-Specs
+dotnet run
