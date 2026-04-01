@@ -44,6 +44,6 @@ Vil du pille i koden, ændre farverne eller tilføje nye funktioner? Projektet e
 Klon projektet og kør det direkte i din terminal:
 
 ```bash
-git clone [https://github.com/DIT-BRUGERNAVN/Simple-Specs.git](https://github.com/MRBennetsen/Simple-Specs.git)
+git clone [https://github.com/MRBennetsen/Simple-Specs.git](https://github.com/MRBennetsen/Simple-Specs.git)
 cd Simple-Specs
 dotnet run
