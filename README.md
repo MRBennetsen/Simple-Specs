@@ -23,7 +23,7 @@ En elegant og brugervenlig Windows-applikation, der viser detaljerede maskinvare
 
 ## Installation & Brug
 
-### Fra kilt kode
+### Fra kilde kode
 
 1. Klon repositoriet:
 ```bash
