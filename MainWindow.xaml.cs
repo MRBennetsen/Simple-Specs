@@ -328,15 +328,47 @@ namespace Simple_Specs
             string info = "";
             try 
             {
-                var ni = NetworkInterface.GetAllNetworkInterfaces().FirstOrDefault(i => i.OperationalStatus == OperationalStatus.Up && i.NetworkInterfaceType != NetworkInterfaceType.Loopback && i.NetworkInterfaceType != NetworkInterfaceType.Tunnel);
-                if (ni != null) { var props = ni.GetIPProperties(); var addr = props.UnicastAddresses.FirstOrDefault(a => a.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork); string macAddress = string.Join("-", ni.GetPhysicalAddress().GetAddressBytes().Select(b => b.ToString("X2"))); info += $"Kort: {ni.Description}\nPrivat IP: {addr?.Address}\nMAC: {macAddress}\n"; }
-                else { info += "Ingen aktiv lokal netværksforbindelse fundet.\n"; }
+                // Vi finder nu ALLE kort der er "Up" og som ikke er Loopback (localhost)
+                var interfaces = NetworkInterface.GetAllNetworkInterfaces()
+                    .Where(i => i.OperationalStatus == OperationalStatus.Up && 
+                                i.NetworkInterfaceType != NetworkInterfaceType.Loopback);
+                
+                bool foundAny = false;
 
+                foreach (var ni in interfaces)
+                {
+                    var props = ni.GetIPProperties();
+                    var ipv4 = props.UnicastAddresses.FirstOrDefault(a => a.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                    
+                    // Vi vil kun vise kortet, hvis det rent faktisk har fået en rigtig IPv4 adresse
+                    if (ipv4 != null)
+                    {
+                        string macAddress = string.Join("-", ni.GetPhysicalAddress().GetAddressBytes().Select(b => b.ToString("X2")));
+                        
+                        info += $"Kort: {ni.Description}\n";
+                        info += $"IP: {ipv4.Address}\n";
+                        info += $"MAC: {macAddress}\n\n";
+                        
+                        foundAny = true;
+                    }
+                }
+
+                if (!foundAny) 
+                { 
+                    info += "Ingen aktive netværksforbindelser med IP-adresser fundet.\n\n"; 
+                }
+
+                // Til sidst henter vi den offentlige IP (som vil være den rute maskinen bruger ud mod nettet)
                 using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(5) };
-                string publicIp = await client.GetStringAsync("https://api.ipify.org"); info += $"Offentlig IP: {publicIp}";
+                string publicIp = await client.GetStringAsync("https://api.ipify.org");
+                info += $"Offentlig IP: {publicIp}";
             }
-            catch { info += "Kunne ikke hente offentlig IP (Tjek internetforbindelse)."; }
-            return info;
+            catch 
+            { 
+                info += "Kunne ikke hente offentlig IP (Tjek internetforbindelse)."; 
+            }
+            
+            return info.Trim();
         }
 
         private async void UpdateNetwork_Click(object sender, RoutedEventArgs e) { NetworkText.Text = "Henter netværksinfo...\nVent venligst."; NetworkText.Text = await GetNetworkInfoAsync(); }
